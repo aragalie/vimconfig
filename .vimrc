@@ -75,22 +75,19 @@ syntax on
 
 "Add PEP8 indentation for .py files
 au BufNewFile,BufRead *.py
-    \ set tabstop=4
-    \ set softtabstop=4
-    \ set shiftwidth=4
-    \ set textwidth=79
-    \ set expandtab
-    \ set autoindent
-    \ set fileformat=unix
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=79 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix |
 
 "Different commands for the other filetypes
 au BufNewFile,BufRead *.js, *.html, *.css
-    \ set tabstop=2
-    \ set softtabstop=2
-    \ set shiftwidth=2
-
-"Mark extra whitespace as bad and mark it
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+    \ set tabstop=2 |
+    \ set softtabstop=2 |
+    \ set shiftwidth=2 |
 
 
 "------------GENERAL INTERFACE OPTIONS------------
@@ -142,17 +139,14 @@ noremap <C-Z> :update<CR>
 vnoremap <C-Z> <C-C>:update<CR> 
 inoremap <C-Z> <C-O>:update<CR> 
 
-
 "Enable IDE-like code folding
 set foldmethod=indent
 set foldlevel=99
 nnoremap <space> za          "Enable folding with the spacebar
 
-
 "Specify different areas of the screen where the splits should occur by adding the following lines to the .vimrc file
 set splitbelow
 set splitright
-
 
 "Split navigations
 nnoremap <C-J> <C-W><C-J> "Ctrl-j move to the split below
