@@ -28,11 +28,9 @@ let g:ycm_autoclose_preview_window_after_completion=1 "Ensure the autocomplete w
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR> "Shortcut for goto definition
 let g:ycm_python_binary_path = '/usr/bin/python' "Use the systems Python for autocomplete, as Anaconds is not supported
 
-
 Plugin 'jnurmine/Zenburn'             "-----Color schemes
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'lifepillar/vim-solarized8'
-
 
 Plugin 'scrooloose/nerdtree'          "-----Proper file tree
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree "Hide .pyc files
