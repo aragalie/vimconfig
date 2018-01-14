@@ -36,6 +36,8 @@ Plugin 'lifepillar/vim-solarized8'
 
 Plugin 'scrooloose/nerdtree'          "-----Proper file tree
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree "Hide .pyc files
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 Plugin 'scrooloose/nerdcommenter'     "-----Nice looking comments
 let g:NERDSpaceDelims = 1 " Add spaces after comment delimiters by default
