@@ -1,84 +1,118 @@
-"---VUNDLE CONFIGURATION
-
-set nocompatible              " be iMproved, required
+set nocompatible              " required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
+
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+Plugin 'gmarik/Vundle.vim'
+
+"------------PLUGIN LIST START------------
+
+Plugin 'kien/ctrlp.vim'               "-----Search for anything from Vim
+Plugin 'tpope/vim-fugitive'           "-----Git commands in Vim
+Plugin 'vim-scripts/indentpython.vim' "-----Proper indentation behaviour for Python
+Plugin 'vim-syntastic/syntastic'      "-----Check syntax on each save
+Plugin 'nvie/vim-flake8'              "-----Check PEP8
+Plugin 'jistr/vim-nerdtree-tabs'      "-----Use tabs
+
+Plugin 'tmhedberg/SimpylFold'         "-----Code folding"
+let g:SimpylFold_docstring_preview=1 "See the docstring for folded code
+
+Plugin 'Valloric/YouCompleteMe'       "-----Autocomplete functionality
+let g:ycm_autoclose_preview_window_after_completion=1 "Ensure the autocomplete window goes away when done with it
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR> "Shortcut for goto definition
+let g:ycm_python_binary_path = '/usr/bin/python' "Use the systems Python for autocomplete, as Anaconds is not supported
+
+
+Plugin 'jnurmine/Zenburn'             "-----Color schemes
+Plugin 'altercation/vim-colors-solarized'
 Plugin 'lifepillar/vim-solarized8'
-Plugin 'easymotion/vim-easymotion'
-Plugin 'tpope/vim-fugitive'
+
+
+Plugin 'scrooloose/nerdtree'          "-----Proper file tree
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree "Hide .pyc files
+
+Plugin 'scrooloose/nerdcommenter'     "-----Nice looking comments
+let g:NERDSpaceDelims = 1 " Add spaces after comment delimiters by default
+let g:NERDCompactSexyComs = 1 " Use compact syntax for prettified multi-line comments
+let g:NERDDefaultAlign = 'left' " Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDAltDelims_java = 1 " Set a language to use its alternate delimiters by default
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } } " Add your own custom formats or override the defaults
+let g:NERDCommentEmptyLines = 1 " Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDTrimTrailingWhitespace = 1 " Enable trimming of trailing whitespace when uncommenting
+
+Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}  "-----Fancy status bar
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'mattn/emmet-vim'
-Plugin 'wesq3/vim-windowswap'
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'tpope/vim-surround'
-5
-"PLUGIN NerdCOMMENTER  options"
-" Add spaces after comment delimiters by default
-let g:NERDSpaceDelims = 1
-" Use compact syntax for prettified multi-line comments
-let g:NERDCompactSexyComs = 1
-" Align line-wise comment delimiters flush left instead of following code indentation
-let g:NERDDefaultAlign = 'left'
-" Set a language to use its alternate delimiters by default
-let g:NERDAltDelims_java = 1
-" Add your own custom formats or override the defaults
-let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
-" Allow commenting and inverting empty lines (useful when commenting a region)
-let g:NERDCommentEmptyLines = 1
-" Enable trimming of trailing whitespace when uncommenting
-let g:NERDTrimTrailingWhitespace = 1
-
-"PLUGIN SOLARIZED options"
-colorscheme solarized8_dark_high
-
-"PLUGIN-AIRLINE options
-"let g:airline_theme='<simple>'
-let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled = 1 "let g:airline_theme='<simple>'
 set laststatus=2
 
-"PLUGIN Multiple Cursors  options"
-"let g:multi_cursor_use_default_mapping=0
-"let g:multi_cursor_next_key='<C-n>'
-"let g:multi_cursor_prev_key='<C-p>'
-"let g:multi_cursor_skip_key='<C-x>'
-"let g:multi_cursor_quit_key='<Esc>'
-
-" All of your Plugins must be added before the following line
+"------------PLUGIN LIST END------------
 call vundle#end()            " required
 filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
 
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line:
 
-" Basic Settings
+"------------PYTHON SPECIFIC OPTIONS------------
 
+"Python with virtualenv support
+py << EOF
+import os
+import sys
+if 'VIRTUAL_ENV' in os.environ:
+  project_base_dir = os.environ['VIRTUAL_ENV']
+  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+  execfile(activate_this, dict(__file__=activate_this))
+EOF
+
+"Make Python code look pretty
+let python_highlight_all=1
 syntax on
-set guifont=Menlo:h14
-set nocompatible
-set modelines=0
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set expandtab
-set encoding=utf-8
+
+"Add PEP8 indentation for .py files
+au BufNewFile,BufRead *.py
+    \ set tabstop=4
+    \ set softtabstop=4
+    \ set shiftwidth=4
+    \ set textwidth=79
+    \ set expandtab
+    \ set autoindent
+    \ set fileformat=unix
+
+"Different commands for the other filetypes
+au BufNewFile,BufRead *.js, *.html, *.css
+    \ set tabstop=2
+    \ set softtabstop=2
+    \ set shiftwidth=2
+
+"Mark extra whitespace as bad and mark it
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+
+
+"------------GENERAL INTERFACE OPTIONS------------
+colorscheme solarized8_dark_high     "sets the color scheme
+set encoding=utf-8                   "Set encoding"
+let mapleader = ","                  "Map leader to ,
+inoremap jj <ESC>                    "Map jj as ESC
+noremap <Leader>e :quit<CR>          "Quit current window
+noremap <Leader>E :qa!<CR>           "Quit all windows  
+set nu                               "Turn on line numbers
+set clipboard=unnamed                "Access the system clipboard for copy/paste
+set history=700                      "History to be kept
+set undolevels=700                   "Undo levels to be stored
+set guifont=Menlo:h16                "Font and size to be used
+set relativenumber                   "Have row number counted away from your cursor position
+set  nrformats=                      "Treat all numbers as decimal, even if padded by 0
+set nobackup 
+set nowritebackup
+set noswapfile
+set colorcolumn=80
+set formatoptions=qrn1
+set spell spelllang=en_us
 set scrolloff=3
 set autoindent
 set showmode
@@ -95,61 +129,33 @@ nnoremap / /\v
 vnoremap / /\v
 set ignorecase
 set smartcase
-set gdefault
-set incsearch
-set showmatch
-set hlsearch
-set wrap
-set linebreak
-set nolist
-set formatoptions=qrn1
-set spell spelllang=en_us
-set colorcolumn=80
-set clipboard=unnamed 
-set relativenumber
-set number
+set nocompatible
+set modelines=0
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
 
-" Options Set by Alex 
 
-set  nrformats= "treat all numbers as decimal, even if padded by 0
-inoremap jj <ESC>
-let mapleader = ","
-noremap <Up> <Nop>
-noremap <Down> <Nop>
-noremap <Left> <Nop>
-noremap <Right> <Nop>
+"Quicksave command
+noremap <C-Z> :update<CR> 
+vnoremap <C-Z> <C-C>:update<CR> 
+inoremap <C-Z> <C-O>:update<CR> 
 
-set termguicolors
-autocmd! bufwritepost .vimrc source %
-imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>") "remap Emmet to TAB " Quicksave command
-map <Leader>n <esc>:tabprevious<CR> " easier moving between tabs
-map <Leader>m <esc>:tabnext<CR>
-noremap <C-n> :nohl<CR> " Removes highlight of your last search
-vnoremap <C-n> :nohl<CR>
-inoremap <C-n> :nohl<CR>
-noremap <Leader>e :quit<CR>  " Quit current window
-noremap <Leader>E :qa!<CR>   " Quit all windows
-noremap <C-Z> :update<CR> " Quicksave command
-vnoremap <C-Z> <C-C>:update<CR> " Quicksave command
-inoremap <C-Z> <C-O>:update<CR> " Quicksave command
-vnoremap <Leader>s :sort<CR> " map sort function to a key
-set number  " show line numbers
-set tw=79   " width of document (used by gd)
-set nowrap  " don't automatically wrap on load
-set fo-=t   " don't automatically wrap text when typing
-highlight ColorColumn ctermbg=233
-set history=700
-set undolevels=700
-set nobackup
-set nowritebackup
-set noswapfile
-vnoremap < <gv  " better indentation/ easier moving of code blocks
-" Try to go into visual mode (v), thenselect several lines of code here and
-" then press ``>`` several times.
-vnoremap > >gv  " better indent" 
-vmap Q gq " easier formatting of paragraphs
-nmap Q gqap " easier formatting of paragraphs
-nnoremap j gj
-nnoremap k gk
-nnoremap <leader>w <C-w>v<C-w>l",w to open a new vertical split
 
+"Enable IDE-like code folding
+set foldmethod=indent
+set foldlevel=99
+nnoremap <space> za          "Enable folding with the spacebar
+
+
+"Specify different areas of the screen where the splits should occur by adding the following lines to the .vimrc file
+set splitbelow
+set splitright
+
+
+"Split navigations
+nnoremap <C-J> <C-W><C-J> "Ctrl-j move to the split below
+nnoremap <C-K> <C-W><C-K> "Ctrl-k move to the split above
+nnoremap <C-L> <C-W><C-L> "Ctrl-l move to the split to the right
+nnoremap <C-H> <C-W><C-H> "Ctrl-h move to the split to the left
